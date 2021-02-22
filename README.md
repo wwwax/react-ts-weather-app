@@ -1,1 +1,3 @@
-# Tech stack: ReactJS, TypeScript, GraphQL;
+# Weather App
+
+## Tech stack: ReactJS, TypeScript, GraphQL;
