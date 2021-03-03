@@ -1,18 +1,23 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useWeatherDataQuery } from '../generated/graphql';
 
 type Props = {
   city: string;
 };
 
-// const convertToCelsius = (value: any) => {
-//   return value - 273.15;
-// };
+const getCelsiusFromKelvin = (value: any) => {
+  const result = Math.round(value - 273.15);
+
+  return result;
+};
 
 const WeatherData: React.FC<Props> = ({ city }) => {
   const { data, loading, error } = useWeatherDataQuery({
     variables: { name: city },
   });
+
+  const kelvin = data?.getCityByName?.weather?.temperature?.actual;
+  const celsius = useMemo(() => getCelsiusFromKelvin(kelvin), [kelvin]);
 
   if (loading) {
     return <h1>Loading...</h1>;
@@ -47,10 +52,7 @@ const WeatherData: React.FC<Props> = ({ city }) => {
   }
 
   const { name, country } = data.getCityByName;
-  const { actual } = data.getCityByName.weather.temperature;
   const { description } = data.getCityByName.weather.summary;
-
-  // const celsius = useMemo(() => convertToCelsius(actual), [actual]);
 
   return (
     <div className='WeatherData'>
@@ -58,7 +60,7 @@ const WeatherData: React.FC<Props> = ({ city }) => {
 
       <h3>
         <span>temperature: </span>
-        {`${actual}`}&deg;
+        {`${celsius}`}&deg;
       </h3>
 
       <h3>
