@@ -5,8 +5,8 @@ type Props = {
   city: string;
 };
 
-const getCelsiusFromKelvin = (value: any) => {
-  const result = Math.round(value - 273.15);
+const getCelsiusFromKelvin = (kelvin: any) => {
+  const result = Math.round(kelvin - 273.15);
 
   return result;
 };
@@ -16,8 +16,10 @@ const WeatherData: React.FC<Props> = ({ city }) => {
     variables: { name: city },
   });
 
-  const kelvin = useMemo(() => data?.getCityByName?.weather?.temperature?.actual, [data]);
-  const celsius = useMemo(() => getCelsiusFromKelvin(kelvin), [kelvin]);
+  const celsius = useMemo(() => {
+    const kelvin = data?.getCityByName?.weather?.temperature?.actual;
+    return getCelsiusFromKelvin(kelvin);
+  }, [data]);
 
   if (loading) {
     return <h1>Loading...</h1>;
