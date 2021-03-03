@@ -16,7 +16,7 @@ const WeatherData: React.FC<Props> = ({ city }) => {
     variables: { name: city },
   });
 
-  const kelvin = data?.getCityByName?.weather?.temperature?.actual;
+  const kelvin = useMemo(() => data?.getCityByName?.weather?.temperature?.actual, [data]);
   const celsius = useMemo(() => getCelsiusFromKelvin(kelvin), [kelvin]);
 
   if (loading) {
